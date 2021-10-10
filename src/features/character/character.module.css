@@ -1,0 +1,6 @@
+.box_style {
+    border-width: 3px;
+    border-radius: 5px;
+    border-style: solid;
+    width: 300px;
+}
