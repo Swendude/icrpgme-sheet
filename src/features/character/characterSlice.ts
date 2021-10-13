@@ -3,6 +3,16 @@ import { RootState } from "../../app/store";
 
 type toRoll = { state: "Not rolled" } | { state: "Rolled"; value: number };
 
+export function characterHealthToView(char_health : CharacterHealth) : string {
+  switch (char_health.state) {
+    case "Not Dying": return char_health.hitpoints.toString()
+    case "Dying": return "X"
+    case "Dead": return "X"
+
+  }
+}
+
+
 type CharacterHealth =
   | { state: "Not Dying"; hitpoints: number }
   | { state: "Dying"; counter: toRoll }
@@ -61,24 +71,24 @@ export type Character = {
 };
 
 const initialState: Character = {
-  name: "",
-  lifeform: "",
-  type: "",
-  story: "",
+  name: "Thorin Oakenshield",
+  lifeform: "Dwarf",
+  type: "Warrior",
+  story: "Thorin II was born in TA 2746 to Dwarven prince Thráin II in the city of The Lonely Mountain.",
   hearts: 1,
   hitpoints: { state: "Not Dying", hitpoints: 10 },
   stunpoints: 10,
   hero_coin: false,
   coin: 0,
   innate: {
-    str: 0,
-    dex: 0,
-    con: 0,
+    str: 5,
+    dex: 1,
+    con: 2,
     int: 0,
     wis: 0,
     cha: 0,
-    basic: 0,
-    weapon_tools: 0,
+    basic: 1,
+    weapon_tools: 3,
     guns: 0,
     energy_magic: 0,
   },
