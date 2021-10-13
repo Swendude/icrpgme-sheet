@@ -33,7 +33,7 @@ export function Character() {
   const dispatch = useAppDispatch();
 
   return (
-    <div className=" m-4 max-w-sm mx-auto bg-white rounded shadow-md border-4 border-black">
+    <div className="flex-col w-80 bg-white rounded shadow-md border-4 border-black">
       <TextProp label="Name" value={character.name} />
       <TextProp label="Type" value={character.type} />
       <TextProp label="Lifeform" value={character.lifeform} />
