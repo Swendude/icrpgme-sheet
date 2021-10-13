@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import {
-  decrement,
-  increment,
-  selectCharacter,
-  characterHealthToView,
-} from "./characterSlice";
+import { useAppSelector } from "../../app/hooks";
+import { selectCharacter, characterHealthToView } from "./characterSlice";
 
 export function Character() {
   const character = useAppSelector(selectCharacter);
-  const dispatch = useAppDispatch();
 
   const [showStory, setShowStory] = useState(true);
 
