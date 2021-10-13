@@ -54,7 +54,26 @@ export function Character() {
           <div className='flex-grow ml-2 mr-2 border-b border-black border-opacity-40'></div>
           <div className='text-xs font-bold text-black text-opacity-0'>◀</div>
         </div>
-        stats
+        <div className='flex-col  flex-grow'>
+          {Object.entries(character.innate.stats)
+            .filter((k) => k[1] != 0)
+            .map((k) => {
+              return <StatRow statName={k[0]} value={k[1]} />;
+            })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatRow(props: { statName: string; value: number }) {
+  return (
+    <div className='flex items-center justify-between pl-2 pr-5'>
+      <div className=' pr-2 font-bold text-lg items-center'>
+        <p>{props.statName.toUpperCase()}</p>
+      </div>
+      <div className=''>
+        <p>{props.value}</p>
       </div>
     </div>
   );
