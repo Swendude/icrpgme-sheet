@@ -41,7 +41,8 @@ export function Character(props: { ix: number }) {
             </div>
           </button>
           {editHp && (
-            <div className="absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-full">
+            <div className="absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-full"
+              onBlur={() => setEditHp(!editHp)}>
               {[-10, -5, -1, 1, 5, 10].map((val) => (
                 <button 
                   className="flex w-full justify-center hover:bg-black hover:bg-opacity-40 active:bg-black active:bg-opacity-100 active:text-white"
