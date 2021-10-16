@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { ReactNode } from "hoist-non-react-statics/node_modules/@types/react";
+import { ReactNode } from "react";
 import React, { useState, useRef } from "react";
 import {
   useAppSelector,
