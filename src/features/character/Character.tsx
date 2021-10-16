@@ -1,3 +1,5 @@
+import { PayloadAction } from "@reduxjs/toolkit";
+import { ReactNode } from "hoist-non-react-statics/node_modules/@types/react";
 import React, { useState, useRef } from "react";
 import {
   useAppSelector,
@@ -8,13 +10,19 @@ import {
   selectCharacter,
   characterHealthToView,
   changeHitpoints,
+  switchHeroCoin,
+  changeCoin,
 } from "./characterSlice";
 
 export const Character = (props: { ix: number }) => {
+  const dispatch = useAppDispatch();
   const editHpContainer = useRef(null);
+  const editCoinContainer = useRef(null);
   const character = useAppSelector(selectCharacter(props.ix));
   const [editHp, setEditHp] = useState(false);
+  const [editCoin, setEditCoin] = useState(false);
   useClickOutsideContainer(editHpContainer, () => setEditHp(false));
+  useClickOutsideContainer(editCoinContainer, () => setEditCoin(false));
 
   return (
     <div className='font-mono flex-col flex-grow-0 bg-white border-2 border-black rounded w-80 max-w-xs'>
@@ -43,7 +51,15 @@ export const Character = (props: { ix: number }) => {
               </div>
             </div>
           </button>
-          {editHp && <HpMenu ix={props.ix} ref={editHpContainer} />}
+          {editHp && (
+            <DdNumberMenu
+              dispatchAction={(val) =>
+                changeHitpoints({ char_ix: props.ix, change: val })
+              }
+              scale={[-10, -5, -1, 1, 5, 10]}
+              ref={editHpContainer}
+            />
+          )}
         </div>
       </div>
 
@@ -51,12 +67,48 @@ export const Character = (props: { ix: number }) => {
         <p>{character.story}</p>
       </ColBlock>
 
+      <ColBlock title={"INFO"} collapse={false}>
+        <InfoRow statName={"DEFENSE"} descr={"10+CON+DEF"}>
+          <p className='font-bold text-l'>{10 + character.innate.stats.con}</p>
+        </InfoRow>
+        <InfoRow statName={"HERO COIN"} descr={"REROLL ANYTHING"}>
+          <button
+            aria-pressed={character.hero_coin}
+            className={
+              character.hero_coin
+                ? "rounded-lg bg-black bg-opacity-40 border-black border-2 w-4 h-4"
+                : "rounded-lg bg-white border-black border-2 w-4 h-4"
+            }
+            onClick={() => dispatch(switchHeroCoin({ char_ix: props.ix }))}
+          ></button>
+        </InfoRow>
+        <InfoRow statName={"COIN"} descr={"LOOT!"}>
+          <div className='relative'>
+            <button
+              onClick={() => setEditCoin(!editCoin)}
+              className='font-bold text-l'
+            >
+              {character.coin}
+            </button>
+            {editCoin && (
+              <DdNumberMenu
+                scale={[1000, 100, 10, 1, -1, -10, -100, -1000]}
+                dispatchAction={(val) =>
+                  changeCoin({ char_ix: props.ix, change: val })
+                }
+                ref={editCoinContainer}
+              ></DdNumberMenu>
+            )}
+          </div>
+        </InfoRow>
+      </ColBlock>
+
       <ColBlock title={"STATS"} collapse={false}>
         {Object.entries(character.innate.stats)
           .filter((k) => k[1] !== 0)
           .map((k, i) => {
             return (
-              <StatRow key={i} statName={k[0]} value={k[1]} diceDescr={"D20"} />
+              <StatRow key={i} statName={k[0]} value={k[1]} descr={"D20"} />
             );
           })}
       </ColBlock>
@@ -70,7 +122,7 @@ export const Character = (props: { ix: number }) => {
                 key={i}
                 statName={k[0].replace("_", " & ")}
                 value={k[1]}
-                diceDescr={["D4", "D6", "D8", "D10", "D12"][i]}
+                descr={["D4", "D6", "D8", "D10", "D12"][i]}
               />
             );
           })}
@@ -111,18 +163,14 @@ const ColBlock = (props: {
   );
 };
 
-function StatRow(props: {
-  statName: string;
-  value: number;
-  diceDescr: string;
-}) {
+function StatRow(props: { statName: string; value: number; descr: string }) {
   return (
     <div className='flex items-center justify-between pl-2 pr-5 odd:bg-gray-200'>
       <div className=' pr-2 font-bold text-lg items-center'>
         <div className='flex items-end'>
           <p>{props.statName.toUpperCase()}</p>
           <p className='font-light text-xs text-black text-opacity-40'>
-            {props.diceDescr}
+            {props.descr}
           </p>
         </div>
       </div>
@@ -134,29 +182,53 @@ function StatRow(props: {
   );
 }
 
-const HpMenu = React.forwardRef((props: { ix: number }, ref: any) => {
-  const dispatch = useAppDispatch();
-
+function InfoRow(props: {
+  statName: string;
+  descr: string;
+  children: ReactNode;
+}) {
   return (
-    <div
-      className='absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-full'
-      ref={ref}
-    >
-      {[-10, -5, -1, 1, 5, 10].map((val) => (
-        <button
-          className='flex w-full pt-2 pb-2 justify-center hover:bg-black hover:bg-opacity-40 active:bg-black active:bg-opacity-100 active:text-white'
-          onClick={() =>
-            dispatch(
-              changeHitpoints({
-                char_ix: props.ix,
-                hitpoints_change: val,
-              })
-            )
-          }
-        >
-          {val > 0 ? `+${val}` : val}{" "}
-        </button>
-      ))}
+    <div className='flex items-center justify-between pl-2 pr-5 odd:bg-gray-200'>
+      <div className=' pr-2 font-bold text-lg items-center'>
+        <div className='flex items-end'>
+          <p>{props.statName.toUpperCase()}</p>
+          <p className='font-light text-xs text-black text-opacity-40'>
+            {props.descr}
+          </p>
+        </div>
+      </div>
+      <div className='flex items-center'>{props.children}</div>
     </div>
   );
-});
+}
+
+const DdNumberMenu = React.forwardRef(
+  (
+    props: {
+      scale: number[];
+      dispatchAction: (
+        change: number
+      ) => PayloadAction<{ char_ix: number; change: number }>;
+    },
+    ref: any
+  ) => {
+    const dispatch = useAppDispatch();
+
+    return (
+      <div
+        className='absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-16 z-50'
+        ref={ref}
+      >
+        {props.scale.map((val, i) => (
+          <button
+            key={i}
+            className='flex w-full pt-2 pb-2 justify-center hover:bg-black hover:bg-opacity-40 active:bg-black active:bg-opacity-100 active:text-white'
+            onClick={() => dispatch(props.dispatchAction(val))}
+          >
+            {val > 0 ? `+${val}` : val}{" "}
+          </button>
+        ))}
+      </div>
+    );
+  }
+);

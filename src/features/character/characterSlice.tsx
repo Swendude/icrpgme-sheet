@@ -215,13 +215,15 @@ export const characterSlice = createSlice({
   reducers: {
     changeHitpoints(
       state,
-      action: PayloadAction<{ char_ix: number; hitpoints_change: number }>
+      action: PayloadAction<{ char_ix: number; change: number }>
     ) {
       const char_hp = state[action.payload.char_ix].hitpoints;
       switch (char_hp.state) {
         case "Not Dying":
-          var new_hp = char_hp.hitpoints + action.payload.hitpoints_change;
-          if (new_hp < 0) {new_hp = 0};
+          var new_hp = char_hp.hitpoints + action.payload.change;
+          if (new_hp < 0) {
+            new_hp = 0;
+          }
           state[action.payload.char_ix].hitpoints = {
             ...char_hp,
             hitpoints: new_hp,
@@ -236,6 +238,16 @@ export const characterSlice = createSlice({
           return state;
       }
     },
+    changeCoin(
+      state,
+      action: PayloadAction<{ char_ix: number; change: number }>
+    ) {
+      state[action.payload.char_ix].coin += action.payload.change;
+    },
+    switchHeroCoin(state, action: PayloadAction<{ char_ix: number }>) {
+      state[action.payload.char_ix].hero_coin =
+        !state[action.payload.char_ix].hero_coin;
+    },
     updateInnate(
       state,
       action: PayloadAction<{ char_ix: number; new_innate: Attributes }>
@@ -245,7 +257,8 @@ export const characterSlice = createSlice({
   },
 });
 
-export const { updateInnate, changeHitpoints } = characterSlice.actions;
+export const { updateInnate, changeHitpoints, switchHeroCoin, changeCoin } =
+  characterSlice.actions;
 
 export const selectCoin = (ix: number) => (state: RootState) =>
   state.characters[ix].coin;
