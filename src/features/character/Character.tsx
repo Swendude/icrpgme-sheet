@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import React, { useState, useRef } from "react";
+import {
+  useAppSelector,
+  useAppDispatch,
+  useClickOutsideContainer,
+} from "../../app/hooks";
 import {
   selectCharacter,
   characterHealthToView,
@@ -9,9 +12,12 @@ import {
 
 export function Character(props: { ix: number }) {
   const dispatch = useAppDispatch();
+  const editHpContainer = useRef(null);
   const character = useAppSelector(selectCharacter(props.ix));
   const [showStory, setShowStory] = useState(false);
   const [editHp, setEditHp] = useState(false);
+  
+  useClickOutsideContainer(editHpContainer, () => setEditHp(false));
 
   return (
     <div className="font-mono flex-col flex-grow-0 bg-white border-2 border-black rounded w-80 max-w-xs">
@@ -31,7 +37,7 @@ export function Character(props: { ix: number }) {
             <div className="flex p-1 border border-white rounded">
               <div>
                 <p>
-                  {characterHealthToView(character.hitpoints)}/
+                  {characterHealthToView(character.hitpoints).padStart(2, '0')}/
                   {character.hearts * 10}
                 </p>
               </div>
@@ -41,12 +47,19 @@ export function Character(props: { ix: number }) {
             </div>
           </button>
           {editHp && (
-            <div className="absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-full"
-              onBlur={() => setEditHp(false)}>
+            <div className="absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-full" ref={editHpContainer}>
               {[-10, -5, -1, 1, 5, 10].map((val) => (
-                <button 
+                <button
                   className="flex w-full justify-center hover:bg-black hover:bg-opacity-40 active:bg-black active:bg-opacity-100 active:text-white"
-                  onClick={() => dispatch(changeHitpoints({char_ix: props.ix, hitpoints_change: val}))}>
+                  onClick={() =>
+                    dispatch(
+                      changeHitpoints({
+                        char_ix: props.ix,
+                        hitpoints_change: val,
+                      })
+                    )
+                  }
+                >
                   {val > 0 ? `+${val}` : val}{" "}
                 </button>
               ))}
