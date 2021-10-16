@@ -1,13 +1,16 @@
 module.exports = {
-  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {
-      backgroundColor: ["odd"],
+    purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+    darkMode: false, // or 'media' or 'class'
+    theme: {
+        extend: {},
     },
-  },
-  plugins: [],
+    variants: {
+        extend: {
+            backgroundColor: ["odd", "active"],
+            backgroundOpacity: ["active"],
+            textColor: ["active"]
+
+        },
+    },
+    plugins: [],
 };

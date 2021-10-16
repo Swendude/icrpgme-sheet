@@ -1,39 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
-type toRoll = { state: "Not rolled" } | { state: "Rolled"; value: number };
+// SECTION  Types
 
-export function characterHealthToView(char_health: CharacterHealth): string {
-  switch (char_health.state) {
-    case "Not Dying":
-      return char_health.hitpoints.toString();
-    case "Dying":
-      return "X";
-    case "Dead":
-      return "X";
-  }
-}
+type toRoll = { state: "Not rolled" } | { state: "Rolled"; value: number };
 
 type CharacterHealth =
   | { state: "Not Dying"; hitpoints: number }
   | { state: "Dying"; counter: toRoll }
   | { state: "Dead" };
 
+interface Stats {
+  str: number;
+  dex: number;
+  con: number;
+  int: number;
+  wis: number;
+  cha: number;
+}
+
+interface Effort {
+  basic: number;
+  weapon_tools: number;
+  guns: number;
+  energy_magic: number;
+}
+
 interface Attributes {
-  stats: {
-    str: number;
-    dex: number;
-    con: number;
-    int: number;
-    wis: number;
-    cha: number;
-  };
-  effort: {
-    basic: number;
-    weapon_tools: number;
-    guns: number;
-    energy_magic: number;
-  };
+  stats: Stats;
+  effort: Effort;
 }
 
 interface Item extends Attributes {
@@ -75,6 +70,51 @@ export type Character = {
   notes: string[];
 };
 
+// !SECTION
+// SECTION  Utilities & helper functions
+
+export function characterHealthToView(char_health: CharacterHealth): string {
+  switch (char_health.state) {
+    case "Not Dying":
+      return char_health.hitpoints.toString();
+    case "Dying":
+      return "X";
+    case "Dead":
+      return "X";
+  }
+}
+
+function emptyAttrs(): Attributes {
+  return {
+    stats: {
+      str: 0,
+      dex: 0,
+      con: 0,
+      int: 0,
+      wis: 0,
+      cha: 0,
+    },
+    effort: {
+      basic: 0,
+      weapon_tools: 0,
+      guns: 0,
+      energy_magic: 0,
+    },
+  };
+}
+
+export function createAttrs(
+  subAttrs: Partial<{ stats: Partial<Stats>; effort: Partial<Effort> }>
+): Attributes {
+  return {
+    stats: { ...emptyAttrs().stats, ...subAttrs.stats },
+    effort: { ...emptyAttrs().effort, ...subAttrs.effort },
+  };
+}
+
+// !SECTION
+// SECTION Reducer slice
+
 const initialState: Character[] = [
   {
     name: "Thorin Oakenshield",
@@ -87,22 +127,10 @@ const initialState: Character[] = [
     stunpoints: 10,
     hero_coin: false,
     coin: 0,
-    innate: {
-      stats: {
-        str: 5,
-        dex: 1,
-        con: 2,
-        int: 0,
-        wis: 0,
-        cha: 0,
-      },
-      effort: {
-        basic: 1,
-        weapon_tools: 3,
-        guns: 0,
-        energy_magic: 0,
-      },
-    },
+    innate: createAttrs({
+      stats: { str: 5, dex: 1, con: 2 },
+      effort: { basic: 1, weapon_tools: 3 },
+    }),
     items: [],
     abilities: [],
     powers: [],
@@ -177,13 +205,47 @@ const initialState: Character[] = [
   },
 ];
 
+// !SECTION
+
+// SECTION Exports
+
 export const characterSlice = createSlice({
   name: "characters",
   initialState,
-  reducers: {},
+  reducers: {
+    changeHitpoints(
+      state,
+      action: PayloadAction<{ char_ix: number; hitpoints_change: number }>
+    ) {
+      const char_hp = state[action.payload.char_ix].hitpoints;
+      switch (char_hp.state) {
+        case "Not Dying":
+          var new_hp = char_hp.hitpoints + action.payload.hitpoints_change;
+          if (new_hp < 0) {new_hp = 0};
+          state[action.payload.char_ix].hitpoints = {
+            ...char_hp,
+            hitpoints: new_hp,
+          };
+          return state;
+
+        case "Dying":
+          return state;
+        case "Dead":
+          return state;
+        default:
+          return state;
+      }
+    },
+    updateInnate(
+      state,
+      action: PayloadAction<{ char_ix: number; new_innate: Attributes }>
+    ) {
+      state[action.payload.char_ix].innate = action.payload.new_innate;
+    },
+  },
 });
 
-export const {} = characterSlice.actions;
+export const { updateInnate, changeHitpoints } = characterSlice.actions;
 
 export const selectCoin = (ix: number) => (state: RootState) =>
   state.characters[ix].coin;
@@ -191,3 +253,5 @@ export const selectCharacter = (ix: number) => (state: RootState) =>
   state.characters[ix];
 
 export default characterSlice.reducer;
+
+// !SECTION
