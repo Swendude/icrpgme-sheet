@@ -69,15 +69,19 @@ export const Character = (props: { ix: number }) => {
 
       <ColBlock title={"INFO"} collapse={false}>
         <InfoRow statName={"DEFENSE"} descr={"10+CON+DEF"}>
-          <p className='font-bold text-l'>{10 + character.innate.stats.con}</p>
+          <div className='rounded-b-xl border border-black p-1 mt-1 mb-1'>
+            <p className='font-bold text-l'>
+              {10 + character.innate.stats.con}
+            </p>
+          </div>
         </InfoRow>
         <InfoRow statName={"HERO COIN"} descr={"REROLL ANYTHING"}>
           <button
             aria-pressed={character.hero_coin}
             className={
               character.hero_coin
-                ? "rounded-lg bg-black bg-opacity-40 border-black border-2 w-4 h-4"
-                : "rounded-lg bg-white border-black border-2 w-4 h-4"
+                ? "rounded-xl bg-black border-black border-2 w-4 h-4"
+                : "rounded-xl bg-white border-black border-2 w-4 h-4"
             }
             onClick={() => dispatch(switchHeroCoin({ char_ix: props.ix }))}
           ></button>
@@ -219,10 +223,13 @@ const DdNumberMenu = React.forwardRef(
         className='absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-16 z-50'
         ref={ref}
       >
+        <div className='flex w-full text-xs text-opacity-40 bg-gray-200 text-black  justify-center'>
+          ▲
+        </div>
         {props.scale.map((val, i) => (
           <button
             key={i}
-            className='flex w-full pt-2 pb-2 justify-center hover:bg-black hover:bg-opacity-40 active:bg-black active:bg-opacity-100 active:text-white'
+            className='flex w-full pt-4 pb-4 justify-center odd:bg-gray-200 hover:bg-black hover:bg-opacity-40 active:bg-black active:bg-opacity-100 active:text-white'
             onClick={() => dispatch(props.dispatchAction(val))}
           >
             {val > 0 ? `+${val}` : val}{" "}
