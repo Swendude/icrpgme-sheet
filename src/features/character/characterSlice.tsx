@@ -17,6 +17,7 @@ interface Stats {
   int: number;
   wis: number;
   cha: number;
+  def: number;
 }
 
 interface Effort {
@@ -31,7 +32,7 @@ interface Attributes {
   effort: Effort;
 }
 
-interface Item extends Attributes {
+export interface Item extends Attributes {
   name: string;
   description: string;
   equipped: boolean;
@@ -93,6 +94,7 @@ function emptyAttrs(): Attributes {
       int: 0,
       wis: 0,
       cha: 0,
+      def: 0,
     },
     effort: {
       basic: 0,
@@ -128,10 +130,23 @@ const initialState: Character[] = [
     hero_coin: false,
     coin: 0,
     innate: createAttrs({
-      stats: { str: 5, dex: 1, con: 2 },
+      stats: { str: 17, dex: 11, con: 2 },
       effort: { basic: 1, weapon_tools: 3 },
     }),
-    items: [],
+    items: [
+      {
+        name: "Orcrist",
+        description: "ELVEN, SLICING, MASTERCRAFT",
+        equipped: true,
+        ...createAttrs({ stats: { str: 2 }, effort: { weapon_tools: 3 } }),
+      },
+      {
+        name: "Oak shield",
+        description: "IMPROVISED, MASSIVE, TOUGH",
+        equipped: true,
+        ...createAttrs({ stats: { def: 4 } }),
+      },
+    ],
     abilities: [],
     powers: [],
     augments: [],
@@ -148,23 +163,32 @@ const initialState: Character[] = [
     stunpoints: 10,
     hero_coin: false,
     coin: 0,
-    innate: {
+    innate: createAttrs({
       stats: {
         str: 1,
         dex: 3,
-        con: 0,
         int: 4,
         wis: 1,
-        cha: 0,
       },
       effort: {
-        basic: 0,
         weapon_tools: 3,
-        guns: 0,
         energy_magic: 4,
       },
-    },
-    items: [],
+    }),
+    items: [
+      {
+        name: "Horse River",
+        description: "INT spell: speak in Quenya and summon the water horses",
+        equipped: true,
+        ...createAttrs({}),
+      },
+      {
+        name: "Hadhafang",
+        description: "ELVEN, SLICING, MASTERCRAFT, MAGICAL",
+        equipped: true,
+        ...createAttrs({ effort: { weapon_tools: 4 } }),
+      },
+    ],
     abilities: [],
     powers: [],
     augments: [],
@@ -181,23 +205,49 @@ const initialState: Character[] = [
     stunpoints: 10,
     hero_coin: false,
     coin: 0,
-    innate: {
+    innate: createAttrs({
       stats: {
         str: 2,
         dex: 3,
         con: 1,
-        int: 0,
         wis: 1,
         cha: 4,
       },
       effort: {
         basic: 3,
         weapon_tools: 6,
-        guns: 0,
         energy_magic: 2,
       },
-    },
-    items: [],
+    }),
+    items: [
+      {
+        name: "Andúril, Flame of the West",
+        description: "REFORGED, SHARP, LONG, LEADER",
+        equipped: true,
+        ...createAttrs({
+          stats: { str: 2, cha: 3 },
+          effort: { weapon_tools: 4, basic: 2 },
+        }),
+      },
+      {
+        name: "Evenstar",
+        description: "Magical charm",
+        equipped: true,
+        ...createAttrs({
+          stats: { int: 2 },
+        }),
+      },
+      {
+        name: "Ring of Barahir",
+        description:
+          "An ancient ring that once belonged to the Elven Lord Finrod. It's wearer ages slower.",
+        equipped: true,
+        ...createAttrs({
+          stats: { wis: 8 },
+          effort: { energy_magic: 6 },
+        }),
+      },
+    ],
     abilities: [],
     powers: [],
     augments: [],
@@ -262,8 +312,12 @@ export const { updateInnate, changeHitpoints, switchHeroCoin, changeCoin } =
 
 export const selectCoin = (ix: number) => (state: RootState) =>
   state.characters[ix].coin;
-export const selectCharacter = (ix: number) => (state: RootState) =>
-  state.characters[ix];
+export const selectCharacter = (ix: number) => (state: RootState) => ({
+  ...state.characters[ix],
+  calculatedAttrs: {
+    armor: state.characters[ix].innate.stats.con + 10,
+  },
+});
 
 export default characterSlice.reducer;
 

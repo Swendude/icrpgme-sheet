@@ -12,7 +12,9 @@ import {
   changeHitpoints,
   switchHeroCoin,
   changeCoin,
+  Item,
 } from "./characterSlice";
+import { Stats } from "fs";
 
 export const Character = (props: { ix: number }) => {
   const dispatch = useAppDispatch();
@@ -29,7 +31,7 @@ export const Character = (props: { ix: number }) => {
       <div className='flex items-center justify-between pb-2 pl-2 pr-2 text-white bg-black'>
         <div id='info' className='flex flex-col '>
           <div className='text-lg font-bold '>{character.name}</div>
-          <div className='text-sm font-light text-white text-opacity-40'>
+          <div className='text-sm font-light text-white text-opacity-60'>
             {character.lifeform} - {character.type}
           </div>
         </div>
@@ -68,14 +70,14 @@ export const Character = (props: { ix: number }) => {
       </ColBlock>
 
       <ColBlock title={"INFO"} collapse={false}>
-        <InfoRow statName={"DEFENSE"} descr={"10+CON+DEF"}>
-          <div className='rounded-b-xl border border-black p-1 mt-1 mb-1'>
+        <InfoRow infoName={"Armor"} descr={"10+CON+DEF"}>
+          <div className='rounded-b-xl border bg-white border-black p-1 mt-1 mb-1'>
             <p className='font-bold text-l'>
-              {10 + character.innate.stats.con}
+              {character.calculatedAttrs.armor}
             </p>
           </div>
         </InfoRow>
-        <InfoRow statName={"HERO COIN"} descr={"REROLL ANYTHING"}>
+        <InfoRow infoName={"HERO COIN"} descr={"REROLL ANYTHING"}>
           <button
             aria-pressed={character.hero_coin}
             className={
@@ -86,7 +88,7 @@ export const Character = (props: { ix: number }) => {
             onClick={() => dispatch(switchHeroCoin({ char_ix: props.ix }))}
           ></button>
         </InfoRow>
-        <InfoRow statName={"COIN"} descr={"LOOT!"}>
+        <InfoRow infoName={"COIN"} descr={"LOOT!"}>
           <div className='relative'>
             <button
               onClick={() => setEditCoin(!editCoin)}
@@ -131,6 +133,11 @@ export const Character = (props: { ix: number }) => {
             );
           })}
       </ColBlock>
+      <ColBlock title={"ITEMS"} collapse={false}>
+        {character.items.map((item, i) => {
+          return <ItemRow item={item} key={i} />;
+        })}
+      </ColBlock>
     </div>
   );
 };
@@ -143,8 +150,9 @@ const ColBlock = (props: {
   const [show, setShow] = useState(false);
 
   return (
-    <div id={props.title} className='flex flex-col p-2'>
+    <div id={props.title} className='flex flex-col pt-2 pl-2 pr-2'>
       <div className='flex items-center'>
+        <div className='flex-grow ml-2 mr-2 border-b border-black border-opacity-40'></div>
         <h2 className='text-xs font-bold text-black text-opacity-40'>
           {props.title}
         </h2>
@@ -160,7 +168,7 @@ const ColBlock = (props: {
           <div className='text-xs font-bold text-black text-opacity-0'>◀</div>
         )}
       </div>
-      <div className='flex-col flex-grow'>
+      <div className='flex-col flex-grow pt-2'>
         {props.collapse ? show && props.children : props.children}
       </div>
     </div>
@@ -169,9 +177,9 @@ const ColBlock = (props: {
 
 function StatRow(props: { statName: string; value: number; descr: string }) {
   return (
-    <div className='flex items-center justify-between pl-2 pr-5 odd:bg-gray-200'>
+    <div className='flex items-center justify-between pl-2 pr-2 odd:bg-gray-200'>
       <div className=' pr-2 font-bold text-lg items-center'>
-        <div className='flex items-end'>
+        <div className='flex gap-1 items-center'>
           <p>{props.statName.toUpperCase()}</p>
           <p className='font-light text-xs text-black text-opacity-40'>
             {props.descr}
@@ -187,21 +195,44 @@ function StatRow(props: { statName: string; value: number; descr: string }) {
 }
 
 function InfoRow(props: {
-  statName: string;
+  infoName: string;
   descr: string;
   children: ReactNode;
 }) {
   return (
-    <div className='flex items-center justify-between pl-2 pr-5 odd:bg-gray-200'>
+    <div className='flex items-center justify-between pl-2 pr-2 odd:bg-gray-200'>
       <div className=' pr-2 font-bold text-lg items-center'>
-        <div className='flex items-end'>
-          <p>{props.statName.toUpperCase()}</p>
+        <div className='flex gap-1 items-center'>
+          <p>{props.infoName.toUpperCase()}</p>
           <p className='font-light text-xs text-black text-opacity-40'>
             {props.descr}
           </p>
         </div>
       </div>
       <div className='flex items-center'>{props.children}</div>
+    </div>
+  );
+}
+
+function ItemRow(props: { item: Item }) {
+  return (
+    <div className='flex-col items-center justify-between pl-2 pr-2 odd:bg-gray-200'>
+      <div className='flex gap-2 pr-2 font-bold items-center text-sm'>
+        <p>{props.item.name.toUpperCase()}</p>
+        {Object.entries(props.item.stats)
+          .filter((p) => p[1] > 0)
+          .map((stat) => (
+            <p className='text-xs text-opacity-40 text-black'>
+              {stat[0].toUpperCase()} {stat[1]}
+            </p>
+          ))}
+      </div>
+      <div className='flex'>
+        <p className='font-light text-sm text-black text-opacity-40'>
+          {props.item.description}
+        </p>
+      </div>
+      <div className='flex'></div>
     </div>
   );
 }
