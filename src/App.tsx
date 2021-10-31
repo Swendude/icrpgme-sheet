@@ -1,4 +1,3 @@
-import React from "react";
 import { Character } from "./features/character/Character";
 
 function App() {
