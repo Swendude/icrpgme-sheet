@@ -27,28 +27,24 @@ export const Character = (props: { ix: number }) => {
   useClickOutsideContainer(editCoinContainer, () => setEditCoin(false));
 
   return (
-    <div className='font-mono flex-col flex-grow-0 bg-white border-2 border-black rounded w-80 max-w-xs'>
-      <div className='flex items-center justify-between pb-2 pl-2 pr-2 text-white bg-black'>
-        <div id='info' className='flex flex-col '>
-          <div className='text-lg font-bold '>{character.name}</div>
-          <div className='text-sm font-light text-white text-opacity-60'>
+    <div>
+      <div>
+        <div>
+          <div>{character.name}</div>
+          <div>
             {character.lifeform} - {character.type}
           </div>
         </div>
-        <div className='relative'>
-          <button
-            id='hitpoints'
-            className='items-center text-xs  bg-black'
-            onClick={() => setEditHp(!editHp)}
-          >
-            <div className='flex p-1 border border-white rounded w-16 justify-center'>
+        <div>
+          <button id="hitpoints" onClick={() => setEditHp(!editHp)}>
+            <div>
               <div>
                 <p>
                   {characterHealthToView(character.hitpoints)}/
                   {character.hearts * 10}
                 </p>
               </div>
-              <div className='pl-1'>
+              <div>
                 <p>HP</p>
               </div>
             </div>
@@ -71,10 +67,8 @@ export const Character = (props: { ix: number }) => {
 
       <ColBlock title={"INFO"} collapse={false}>
         <InfoRow infoName={"Armor"} descr={"10+CON+DEF"}>
-          <div className='rounded-b-xl border bg-white border-black p-1 mt-1 mb-1'>
-            <p className='font-bold text-l'>
-              {character.calculatedAttrs.armor}
-            </p>
+          <div>
+            <p>{character.calculatedAttrs.armor}</p>
           </div>
         </InfoRow>
         <InfoRow infoName={"HERO COIN"} descr={"REROLL ANYTHING"}>
@@ -89,11 +83,8 @@ export const Character = (props: { ix: number }) => {
           ></button>
         </InfoRow>
         <InfoRow infoName={"COIN"} descr={"LOOT!"}>
-          <div className='relative'>
-            <button
-              onClick={() => setEditCoin(!editCoin)}
-              className='font-bold text-l'
-            >
+          <div>
+            <button onClick={() => setEditCoin(!editCoin)}>
               {character.coin}
             </button>
             {editCoin && (
@@ -150,45 +141,34 @@ const ColBlock = (props: {
   const [show, setShow] = useState(false);
 
   return (
-    <div id={props.title} className='flex flex-col pt-2 pl-2 pr-2'>
-      <div className='flex items-center'>
-        <div className='flex-grow ml-2 mr-2 border-b border-black border-opacity-40'></div>
-        <h2 className='text-xs font-bold text-black text-opacity-40'>
-          {props.title}
-        </h2>
-        <div className='flex-grow ml-2 mr-2 border-b border-black border-opacity-40'></div>
+    <div id={props.title}>
+      <div>
+        <div></div>
+        <h2>{props.title}</h2>
+        <div></div>
         {props.collapse ? (
-          <button
-            onClick={() => setShow(!show)}
-            className='text-xs font-bold text-black text-opacity-40'
-          >
-            {show ? "▼" : "◀"}
-          </button>
+          <button onClick={() => setShow(!show)}>{show ? "▼" : "◀"}</button>
         ) : (
-          <div className='text-xs font-bold text-black text-opacity-0'>◀</div>
+          <div>◀</div>
         )}
       </div>
-      <div className='flex-col flex-grow pt-2'>
-        {props.collapse ? show && props.children : props.children}
-      </div>
+      <div>{props.collapse ? show && props.children : props.children}</div>
     </div>
   );
 };
 
 function StatRow(props: { statName: string; value: number; descr: string }) {
   return (
-    <div className='flex items-center justify-between pl-2 pr-2 odd:bg-gray-200'>
-      <div className=' pr-2 font-bold text-lg items-center'>
-        <div className='flex gap-1 items-center'>
+    <div>
+      <div>
+        <div>
           <p>{props.statName.toUpperCase()}</p>
-          <p className='font-light text-xs text-black text-opacity-40'>
-            {props.descr}
-          </p>
+          <p>{props.descr}</p>
         </div>
       </div>
-      <div className='flex items-center'>
-        <p className='pr-2 font-light text-xs text-black text-opacity-40'>+</p>
-        <p className='font-bold text-l'>{props.value}</p>
+      <div>
+        <p>+</p>
+        <p>{props.value}</p>
       </div>
     </div>
   );
@@ -200,39 +180,35 @@ function InfoRow(props: {
   children: ReactNode;
 }) {
   return (
-    <div className='flex items-center justify-between pl-2 pr-2 odd:bg-gray-200'>
-      <div className=' pr-2 font-bold text-lg items-center'>
-        <div className='flex gap-1 items-center'>
+    <div>
+      <div>
+        <div>
           <p>{props.infoName.toUpperCase()}</p>
-          <p className='font-light text-xs text-black text-opacity-40'>
-            {props.descr}
-          </p>
+          <p>{props.descr}</p>
         </div>
       </div>
-      <div className='flex items-center'>{props.children}</div>
+      <div>{props.children}</div>
     </div>
   );
 }
 
 function ItemRow(props: { item: Item }) {
   return (
-    <div className='flex-col items-center justify-between pl-2 pr-2 odd:bg-gray-200'>
-      <div className='flex gap-2 pr-2 font-bold items-center text-sm'>
+    <div>
+      <div>
         <p>{props.item.name.toUpperCase()}</p>
         {Object.entries(props.item.stats)
           .filter((p) => p[1] > 0)
           .map((stat) => (
-            <p className='text-xs text-opacity-40 text-black'>
+            <p>
               {stat[0].toUpperCase()} {stat[1]}
             </p>
           ))}
       </div>
-      <div className='flex'>
-        <p className='font-light text-sm text-black text-opacity-40'>
-          {props.item.description}
-        </p>
+      <div>
+        <p>{props.item.description}</p>
       </div>
-      <div className='flex'></div>
+      <div></div>
     </div>
   );
 }
@@ -250,19 +226,10 @@ const DdNumberMenu = React.forwardRef(
     const dispatch = useAppDispatch();
 
     return (
-      <div
-        className='absolute right-0 flex-col border-2 border-black bg-white rounded text-black text-xs w-16 z-50'
-        ref={ref}
-      >
-        <div className='flex w-full text-xs text-opacity-40 bg-gray-200 text-black  justify-center'>
-          ▲
-        </div>
+      <div ref={ref}>
+        <div>▲</div>
         {props.scale.map((val, i) => (
-          <button
-            key={i}
-            className='flex w-full pt-4 pb-4 justify-center odd:bg-gray-200 hover:bg-black hover:bg-opacity-40 active:bg-black active:bg-opacity-100 active:text-white'
-            onClick={() => dispatch(props.dispatchAction(val))}
-          >
+          <button key={i} onClick={() => dispatch(props.dispatchAction(val))}>
             {val > 0 ? `+${val}` : val}{" "}
           </button>
         ))}
