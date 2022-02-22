@@ -1,10 +1,13 @@
 import { Character } from "./features/character/Character";
-
+import { ThemeProvider } from "styled-components";
+import { icrpgTheme } from "./theme";
 function App() {
   return (
-    <div>
-      <Character ix={0} />
-    </div>
+    <ThemeProvider theme={icrpgTheme}>
+      <div>
+        <Character ix={0} />
+      </div>
+    </ThemeProvider>
   );
 }
 

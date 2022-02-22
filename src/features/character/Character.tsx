@@ -13,8 +13,48 @@ import {
   switchHeroCoin,
   changeCoin,
   Item,
+  changeStunpoints,
 } from "./characterSlice";
 import { Stats } from "fs";
+import TopBar from "./TopBar";
+import styled from "styled-components";
+import HitPointCounter from "./HitPointCounter";
+import NumberOptionsMenu from "./NumberOptionsMenu";
+import StunPointCounter from "./StunPointCounter";
+const CharacterCard = styled.div`
+  margin: 32px 122px 0px 122px;
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  color: white;
+  background-color: ${(props) => `${props.theme.colors.secondary}`};
+  border-radius: ${(props) =>
+    `${props.theme.borderRadius} ${props.theme.borderRadius} 0 0`};
+`;
+
+const CardBody = styled.div`
+  border: solid;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-width: ${(props) => props.theme.borderWidth};
+  border-color: black;
+  flex-grow: 1;
+
+  /* border-top: 0px; */
+`;
+
+const CounterRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const CounterBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+`;
 
 export const Character = (props: { ix: number }) => {
   const dispatch = useAppDispatch();
@@ -27,109 +67,111 @@ export const Character = (props: { ix: number }) => {
   useClickOutsideContainer(editCoinContainer, () => setEditCoin(false));
 
   return (
-    <div>
-      <div>
-        <div>
-          <div>{character.name}</div>
-          <div>
-            {character.lifeform} - {character.type}
-          </div>
-        </div>
-        <div>
-          <button id="hitpoints" onClick={() => setEditHp(!editHp)}>
-            <div>
-              <div>
-                <p>
-                  {characterHealthToView(character.hitpoints)}/
-                  {character.hearts * 10}
-                </p>
-              </div>
-              <div>
-                <p>HP</p>
-              </div>
-            </div>
-          </button>
-          {editHp && (
-            <DdNumberMenu
+    <CharacterCard>
+      <TopBar
+        name={character.name}
+        lifeform={character.lifeform}
+        type={character.type}
+      ></TopBar>
+      <CardBody>
+        <CounterRow>
+          <CounterBlock>
+            <h3>Hitpoints</h3>
+            <HitPointCounter
+              hitpoints={character.hitpoints}
+              total={character.calculatedAttrs.final.hearts}
+            />
+            <NumberOptionsMenu
               dispatchAction={(val) =>
                 changeHitpoints({ char_ix: props.ix, change: val })
               }
-              scale={[-10, -5, -1, 1, 5, 10]}
-              ref={editHpContainer}
+              scale={[-5, -1, 1, 5]}
             />
-          )}
-        </div>
-      </div>
+          </CounterBlock>
+          <CounterBlock>
+            <h3>Stunpoints</h3>
+            <StunPointCounter
+              stunpoints={character.stunpoints}
+              total={character.calculatedAttrs.final.stun}
+            />
+            <NumberOptionsMenu
+              dispatchAction={(val) =>
+                changeStunpoints({ char_ix: props.ix, change: val })
+              }
+              scale={[-5, -1, 1, 5]}
+            />
+          </CounterBlock>
+        </CounterRow>
+        {/* <ColBlock title={"STORY"} collapse={true}>
+          <p>{character.story}</p>
+        </ColBlock> */}
 
-      <ColBlock title={"STORY"} collapse={true}>
-        <p>{character.story}</p>
-      </ColBlock>
+        {/* <ColBlock title={"INFO"} collapse={false}>
+          <InfoRow infoName={"Armor"} descr={"10+CON+DEF"}>
+            <div>
+              <p>{character.calculatedAttrs.armor}</p>
+            </div>
+          </InfoRow>
+          <InfoRow infoName={"HERO COIN"} descr={"REROLL ANYTHING"}>
+            <button
+              aria-pressed={character.hero_coin}
+              className={
+                character.hero_coin
+                  ? "rounded-xl bg-black border-black border-2 w-4 h-4"
+                  : "rounded-xl bg-white border-black border-2 w-4 h-4"
+              }
+              onClick={() => dispatch(switchHeroCoin({ char_ix: props.ix }))}
+            ></button>
+          </InfoRow>
+          <InfoRow infoName={"COIN"} descr={"LOOT!"}>
+            <div>
+              <button onClick={() => setEditCoin(!editCoin)}>
+                {character.coin}
+              </button>
+              {editCoin && (
+                <DdNumberMenu
+                  scale={[1000, 100, 10, 1, -1, -10, -100, -1000]}
+                  dispatchAction={(val) =>
+                    changeCoin({ char_ix: props.ix, change: val })
+                  }
+                  ref={editCoinContainer}
+                ></DdNumberMenu>
+              )}
+            </div>
+          </InfoRow>
+        </ColBlock>
 
-      <ColBlock title={"INFO"} collapse={false}>
-        <InfoRow infoName={"Armor"} descr={"10+CON+DEF"}>
-          <div>
-            <p>{character.calculatedAttrs.armor}</p>
-          </div>
-        </InfoRow>
-        <InfoRow infoName={"HERO COIN"} descr={"REROLL ANYTHING"}>
-          <button
-            aria-pressed={character.hero_coin}
-            className={
-              character.hero_coin
-                ? "rounded-xl bg-black border-black border-2 w-4 h-4"
-                : "rounded-xl bg-white border-black border-2 w-4 h-4"
-            }
-            onClick={() => dispatch(switchHeroCoin({ char_ix: props.ix }))}
-          ></button>
-        </InfoRow>
-        <InfoRow infoName={"COIN"} descr={"LOOT!"}>
-          <div>
-            <button onClick={() => setEditCoin(!editCoin)}>
-              {character.coin}
-            </button>
-            {editCoin && (
-              <DdNumberMenu
-                scale={[1000, 100, 10, 1, -1, -10, -100, -1000]}
-                dispatchAction={(val) =>
-                  changeCoin({ char_ix: props.ix, change: val })
-                }
-                ref={editCoinContainer}
-              ></DdNumberMenu>
-            )}
-          </div>
-        </InfoRow>
-      </ColBlock>
+        <ColBlock title={"STATS"} collapse={false}>
+          {Object.entries(character.innate.stats)
+            .filter((k) => k[1] !== 0)
+            .map((k, i) => {
+              return (
+                <StatRow key={i} statName={k[0]} value={k[1]} descr={"D20"} />
+              );
+            })}
+        </ColBlock>
 
-      <ColBlock title={"STATS"} collapse={false}>
-        {Object.entries(character.innate.stats)
-          .filter((k) => k[1] !== 0)
-          .map((k, i) => {
-            return (
-              <StatRow key={i} statName={k[0]} value={k[1]} descr={"D20"} />
-            );
+        <ColBlock title={"EFFORT"} collapse={false}>
+          {Object.entries(character.innate.effort)
+            .filter((k) => k[1] !== 0)
+            .map((k, i) => {
+              return (
+                <StatRow
+                  key={i}
+                  statName={k[0].replace("_", " & ")}
+                  value={k[1]}
+                  descr={["D4", "D6", "D8", "D10", "D12"][i]}
+                />
+              );
+            })}
+        </ColBlock>
+        <ColBlock title={"ITEMS"} collapse={false}>
+          {character.items.map((item, i) => {
+            return <ItemRow item={item} key={i} />;
           })}
-      </ColBlock>
-
-      <ColBlock title={"EFFORT"} collapse={false}>
-        {Object.entries(character.innate.effort)
-          .filter((k) => k[1] !== 0)
-          .map((k, i) => {
-            return (
-              <StatRow
-                key={i}
-                statName={k[0].replace("_", " & ")}
-                value={k[1]}
-                descr={["D4", "D6", "D8", "D10", "D12"][i]}
-              />
-            );
-          })}
-      </ColBlock>
-      <ColBlock title={"ITEMS"} collapse={false}>
-        {character.items.map((item, i) => {
-          return <ItemRow item={item} key={i} />;
-        })}
-      </ColBlock>
-    </div>
+        </ColBlock> */}
+      </CardBody>
+    </CharacterCard>
   );
 };
 
@@ -212,28 +254,3 @@ function ItemRow(props: { item: Item }) {
     </div>
   );
 }
-
-const DdNumberMenu = React.forwardRef(
-  (
-    props: {
-      scale: number[];
-      dispatchAction: (
-        change: number
-      ) => PayloadAction<{ char_ix: number; change: number }>;
-    },
-    ref: any
-  ) => {
-    const dispatch = useAppDispatch();
-
-    return (
-      <div ref={ref}>
-        <div>▲</div>
-        {props.scale.map((val, i) => (
-          <button key={i} onClick={() => dispatch(props.dispatchAction(val))}>
-            {val > 0 ? `+${val}` : val}{" "}
-          </button>
-        ))}
-      </div>
-    );
-  }
-);

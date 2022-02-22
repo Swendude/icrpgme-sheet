@@ -5,7 +5,7 @@ import { RootState } from "../../app/store";
 
 type toRoll = { state: "Not rolled" } | { state: "Rolled"; value: number };
 
-type CharacterHealth =
+export type CharacterHealth =
   | { state: "Not Dying"; hitpoints: number }
   | { state: "Dying"; counter: toRoll }
   | { state: "Dead" };
@@ -27,9 +27,11 @@ interface Effort {
   energy_magic: number;
 }
 
-interface Attributes {
+export interface Attributes {
   stats: Stats;
   effort: Effort;
+  hearts: number;
+  stun: number;
 }
 
 export interface Item extends Attributes {
@@ -58,7 +60,6 @@ export type Character = {
   lifeform: string;
   type: string;
   story: string;
-  hearts: number;
   hitpoints: CharacterHealth;
   stunpoints: number;
   hero_coin: boolean;
@@ -74,6 +75,37 @@ export type Character = {
 // !SECTION
 // SECTION  Utilities & helper functions
 
+const finalAttrs = (char: Character): Attributes =>
+  [
+    char.innate,
+    ...char.abilities,
+    ...char.items,
+    ...char.augments,
+    ...char.powers,
+  ].reduce(addAttributes);
+
+export const addAttributes = (fst: Attributes, snd: Attributes) => ({
+  hearts: (fst.hearts || 0) + (snd.hearts || 0),
+  stun: (fst.stun || 0) + (snd.stun || 0),
+  stats: {
+    str: (fst.stats.str || 0) + (snd.stats.str || 0),
+    dex: (fst.stats.dex || 0) + (snd.stats.dex || 0),
+    con: (fst.stats.con || 0) + (snd.stats.con || 0),
+    int: (fst.stats.int || 0) + (snd.stats.int || 0),
+    wis: (fst.stats.wis || 0) + (snd.stats.wis || 0),
+    cha: (fst.stats.cha || 0) + (snd.stats.cha || 0),
+    def: (fst.stats.def || 0) + (snd.stats.def || 0),
+  },
+  effort: {
+    basic: (fst.effort.basic || 0) + (snd.effort.basic || 0),
+    weapon_tools:
+      (fst.effort.weapon_tools || 0) + (snd.effort.weapon_tools || 0),
+    guns: (fst.effort.guns || 0) + (snd.effort.guns || 0),
+    energy_magic:
+      (fst.effort.energy_magic || 0) + (snd.effort.energy_magic || 0),
+  },
+});
+
 export function characterHealthToView(char_health: CharacterHealth): string {
   switch (char_health.state) {
     case "Not Dying":
@@ -85,8 +117,10 @@ export function characterHealthToView(char_health: CharacterHealth): string {
   }
 }
 
-function emptyAttrs(): Attributes {
+export function emptyAttrs(): Attributes {
   return {
+    hearts: 0,
+    stun: 0,
     stats: {
       str: 0,
       dex: 0,
@@ -106,11 +140,18 @@ function emptyAttrs(): Attributes {
 }
 
 export function createAttrs(
-  subAttrs: Partial<{ stats: Partial<Stats>; effort: Partial<Effort> }>
+  subAttrs: Partial<{
+    stats: Partial<Stats>;
+    effort: Partial<Effort>;
+    hearts: number;
+    stun: number;
+  }>
 ): Attributes {
   return {
     stats: { ...emptyAttrs().stats, ...subAttrs.stats },
     effort: { ...emptyAttrs().effort, ...subAttrs.effort },
+    hearts: subAttrs.hearts || emptyAttrs().hearts,
+    stun: subAttrs.stun || emptyAttrs().stun,
   };
 }
 
@@ -124,14 +165,15 @@ const initialState: Character[] = [
     type: "Warrior",
     story:
       "Thorin II was born in TA 2746 to Dwarven prince Thráin II in the city of The Lonely Mountain.",
-    hearts: 1,
-    hitpoints: { state: "Not Dying", hitpoints: 10 },
-    stunpoints: 10,
+    hitpoints: { state: "Not Dying", hitpoints: 20 },
+    stunpoints: 20,
     hero_coin: false,
     coin: 0,
     innate: createAttrs({
       stats: { str: 17, dex: 11, con: 2 },
       effort: { basic: 1, weapon_tools: 3 },
+      hearts: 1,
+      stun: 1,
     }),
     items: [
       {
@@ -145,6 +187,18 @@ const initialState: Character[] = [
         description: "IMPROVISED, MASSIVE, TOUGH",
         equipped: true,
         ...createAttrs({ stats: { def: 4 } }),
+      },
+      {
+        name: "Heart Stone",
+        description: "EXTRA LIFE",
+        equipped: true,
+        ...createAttrs({ hearts: 1 }),
+      },
+      {
+        name: "Mana Stone",
+        description: "EXTRA POWER",
+        equipped: true,
+        ...createAttrs({ stun: 1 }),
       },
     ],
     abilities: [],
@@ -187,6 +241,22 @@ export const characterSlice = createSlice({
           return state;
       }
     },
+    changeStunpoints(
+      state,
+      action: PayloadAction<{ char_ix: number; change: number }>
+    ) {
+      const char_sp = state[action.payload.char_ix].stunpoints;
+      const new_sp = char_sp + action.payload.change;
+      switch (new_sp > 0) {
+        case true:
+          state[action.payload.char_ix].stunpoints = new_sp;
+          return state;
+        default:
+          state[action.payload.char_ix].stunpoints = 0;
+          return state;
+      }
+    },
+
     changeCoin(
       state,
       action: PayloadAction<{ char_ix: number; change: number }>
@@ -206,8 +276,13 @@ export const characterSlice = createSlice({
   },
 });
 
-export const { updateInnate, changeHitpoints, switchHeroCoin, changeCoin } =
-  characterSlice.actions;
+export const {
+  updateInnate,
+  changeHitpoints,
+  switchHeroCoin,
+  changeCoin,
+  changeStunpoints,
+} = characterSlice.actions;
 
 export const selectCoin = (ix: number) => (state: RootState) =>
   state.characters[ix].coin;
@@ -215,6 +290,7 @@ export const selectCharacter = (ix: number) => (state: RootState) => ({
   ...state.characters[ix],
   calculatedAttrs: {
     armor: state.characters[ix].innate.stats.con + 10,
+    final: finalAttrs(state.characters[ix]),
   },
 });
 

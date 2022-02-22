@@ -1,8 +1,38 @@
+@font-face {
+  font-family: "dejaVu Sans Mono";
+  src: url(./fonts/DejaVuSansMono.ttf) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "dejaVu Sans Mono";
+  src: url(./fonts/DejaVuSansMono-Bold.ttf) format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Dejavu Sans Mono", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-kerning: none;
+  background-color: rgba(55, 65, 81);
+}
+
+@media (max-width: 576px) {
+  body {
+    font-size: 12px;
+  }
+}
+@media (min-width: 577px) and (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+@media (min-width: 769px) {
+  body {
+    font-size: 16px;
+  }
 }
