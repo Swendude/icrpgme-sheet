@@ -10,6 +10,7 @@ declare module "styled-components" {
     colors: {
       main: string;
       secondary: string;
+      background: string;
       positive_change: string;
       negative_change: string;
     };

@@ -21,13 +21,15 @@ import styled from "styled-components";
 import HitPointCounter from "./HitPointCounter";
 import NumberOptionsMenu from "./NumberOptionsMenu";
 import StunPointCounter from "./StunPointCounter";
+import DefenseCounter from "./DefenseCounter";
+import HeroCoinToggle from "./HeroCoinToggle";
 const CharacterCard = styled.div`
   margin: 32px 122px 0px 122px;
   display: flex;
   flex-direction: column;
   padding: 0px;
   color: white;
-  background-color: ${(props) => `${props.theme.colors.secondary}`};
+  background-color: ${(props) => `${props.theme.colors.background}`};
   border-radius: ${(props) =>
     `${props.theme.borderRadius} ${props.theme.borderRadius} 0 0`};
 `;
@@ -46,25 +48,40 @@ const CardBody = styled.div`
 
 const CounterRow = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 const CounterBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* justify-content: space-evenl; */
+`;
+
+const CounterName = styled.h3`
+  color: black;
+  text-align: center;
+  margin: 0.5em;
+`;
+
+const RowSplit = styled.div`
+  border-left: solid 3px black;
+  margin: 0.5em 0.3em 0.5em 0.3em;
+`;
+
+const Description = styled.div`
+  display: flex;
+  text-align: center;
+  align-items: center;
+  color: black;
+  font-weight: normal;
+  font-size: 1em;
   flex-grow: 1;
 `;
 
 export const Character = (props: { ix: number }) => {
-  const dispatch = useAppDispatch();
-  const editHpContainer = useRef(null);
-  const editCoinContainer = useRef(null);
+  // const dispatch = useAppDispatch();
   const character = useAppSelector(selectCharacter(props.ix));
-  const [editHp, setEditHp] = useState(false);
-  const [editCoin, setEditCoin] = useState(false);
-  useClickOutsideContainer(editHpContainer, () => setEditHp(false));
-  useClickOutsideContainer(editCoinContainer, () => setEditCoin(false));
 
   return (
     <CharacterCard>
@@ -76,7 +93,7 @@ export const Character = (props: { ix: number }) => {
       <CardBody>
         <CounterRow>
           <CounterBlock>
-            <h3>Hitpoints</h3>
+            <CounterName>HITPOINTS</CounterName>
             <HitPointCounter
               hitpoints={character.hitpoints}
               total={character.calculatedAttrs.final.hearts}
@@ -88,8 +105,9 @@ export const Character = (props: { ix: number }) => {
               scale={[-5, -1, 1, 5]}
             />
           </CounterBlock>
+          <RowSplit />
           <CounterBlock>
-            <h3>Stunpoints</h3>
+            <CounterName>STUNPOINTS</CounterName>
             <StunPointCounter
               stunpoints={character.stunpoints}
               total={character.calculatedAttrs.final.stun}
@@ -101,7 +119,27 @@ export const Character = (props: { ix: number }) => {
               scale={[-5, -1, 1, 5]}
             />
           </CounterBlock>
+          <RowSplit />
+          <CounterBlock>
+            <CounterName>DEFENSE</CounterName>
+            <DefenseCounter defense={character.calculatedAttrs.defense} />
+            <Description>
+              <span>CON+DEF+10</span>
+            </Description>
+          </CounterBlock>
+          <RowSplit />
+          <CounterBlock>
+            <CounterName>HERO COIN</CounterName>
+            <HeroCoinToggle
+              coin={character.hero_coin}
+              dispatchAction={switchHeroCoin({ char_ix: props.ix })}
+            />
+            <Description>
+              <span>REROLL ANYTHING</span>
+            </Description>
+          </CounterBlock>
         </CounterRow>
+
         {/* <ColBlock title={"STORY"} collapse={true}>
           <p>{character.story}</p>
         </ColBlock> */}

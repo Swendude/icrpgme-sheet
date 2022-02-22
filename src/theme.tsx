@@ -7,6 +7,7 @@ const icrpgTheme: DefaultTheme = {
   colors: {
     main: "#eeeee",
     secondary: "#444444",
+    background: "#FFFDF7",
     positive_change: "#708D81",
     negative_change: "#9B2226",
   },

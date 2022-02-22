@@ -289,7 +289,10 @@ export const selectCoin = (ix: number) => (state: RootState) =>
 export const selectCharacter = (ix: number) => (state: RootState) => ({
   ...state.characters[ix],
   calculatedAttrs: {
-    armor: state.characters[ix].innate.stats.con + 10,
+    defense:
+      state.characters[ix].innate.stats.con +
+      finalAttrs(state.characters[ix]).stats.def +
+      10,
     final: finalAttrs(state.characters[ix]),
   },
 });
