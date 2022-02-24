@@ -160,7 +160,7 @@ export function createAttrs(
 
 const initialState: Character[] = [
   {
-    name: "Thorin Oakenshield",
+    name: "Thorin Oakenshield XII",
     lifeform: "Dwarf",
     type: "Warrior",
     story:
