@@ -23,8 +23,9 @@ import NumberOptionsMenu from "./NumberOptionsMenu";
 import StunPointCounter from "./StunPointCounter";
 import DefenseCounter from "./DefenseCounter";
 import HeroCoinToggle from "./HeroCoinToggle";
+
 const CharacterCard = styled.div`
-  margin: 32px 122px 0px 122px;
+  margin: 2% 10% 0px 10%;
   display: flex;
   flex-direction: column;
   padding: 0px;
@@ -49,6 +50,7 @@ const CardBody = styled.div`
 const CounterRow = styled.div`
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
 `;
 
 const CounterBlock = styled.div`
