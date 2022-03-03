@@ -2,7 +2,6 @@
   "name": "icrpgme-sheet",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://swendude.github.io/icrpgme-sheet",
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
     "@testing-library/jest-dom": "^5.14.1",
