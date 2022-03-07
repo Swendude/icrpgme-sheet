@@ -4,3 +4,5 @@
 Experiment with React, Typescript, Redux & Tailwind.
 
 [Demo here](https://swendude.github.io/icrpgme-sheet/)
+
+Go netlify, go
