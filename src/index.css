@@ -22,23 +22,23 @@ body {
 }
 
 @media (max-width: 320px) {
-  body {
-    font-size: 10px;
+  html {
+    font-size: 12px;
   }
 }
 
 @media (min-width: 321px) and (max-width: 576px) {
-  body {
-    font-size: 10px;
+  html {
+    font-size: 14px;
   }
 }
 @media (min-width: 577px) and (max-width: 768px) {
-  body {
-    font-size: 12px;
+  html {
+    font-size: 16px;
   }
 }
 @media (min-width: 769px) {
-  body {
-    font-size: 16px;
+  html {
+    font-size: 18px;
   }
 }
