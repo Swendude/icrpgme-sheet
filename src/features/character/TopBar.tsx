@@ -40,6 +40,10 @@ const CountBox = styled.div`
 const Name = styled.h1`
   font-size: 2rem;
   margin: 0px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 35rem;
 `;
 
 const Description = styled.span`

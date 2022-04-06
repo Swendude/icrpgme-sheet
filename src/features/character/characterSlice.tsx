@@ -25,6 +25,7 @@ interface Effort {
   weapon_tools: number;
   guns: number;
   energy_magic: number;
+  ultimate: number;
 }
 
 export interface Attributes {
@@ -103,6 +104,7 @@ export const addAttributes = (fst: Attributes, snd: Attributes) => ({
     guns: (fst.effort.guns || 0) + (snd.effort.guns || 0),
     energy_magic:
       (fst.effort.energy_magic || 0) + (snd.effort.energy_magic || 0),
+    ultimate: (fst.effort.ultimate || 0) + (snd.effort.ultimate || 0),
   },
 });
 
@@ -135,6 +137,7 @@ export function emptyAttrs(): Attributes {
       weapon_tools: 0,
       guns: 0,
       energy_magic: 0,
+      ultimate: 0,
     },
   };
 }
@@ -160,7 +163,7 @@ export function createAttrs(
 
 const initialState: Character[] = [
   {
-    name: "Thorin Oakenshield",
+    name: "Thorin Oakenshield the Third of his name, king of the Iron Mountains",
     lifeform: "Dwarf",
     type: "Warrior",
     story:
@@ -170,7 +173,7 @@ const initialState: Character[] = [
     hero_coin: false,
     coin: 0,
     innate: createAttrs({
-      stats: { str: 17, dex: 11, con: 2 },
+      stats: { str: 7, dex: 1, con: 2 },
       effort: { basic: 1, weapon_tools: 3 },
       hearts: 1,
       stun: 1,

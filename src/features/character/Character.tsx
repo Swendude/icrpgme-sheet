@@ -43,6 +43,19 @@ const CardBody = styled.div`
   padding: 0 0.7rem;
 `;
 
+const CardBlock = styled.div`
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  gap: 2rem;
+`;
+
+const CardCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 export const Character = (props: { ix: number }) => {
   const character = useAppSelector(selectCharacter(props.ix));
 
@@ -54,9 +67,34 @@ export const Character = (props: { ix: number }) => {
         type={character.type}
       ></TopBar>
       <CardBody>
-        <CardSpacer title="info" />
-        <CardRow label="STR" />
-        <CardRow label="CHA" />
+        <CardBlock>
+          <CardCol>
+            <CardSpacer title="STATS" />
+            <CardRow label="STR" value={character.innate.stats.str} />
+            <CardRow label="DEX" value={character.innate.stats.dex} />
+            <CardRow label="CON" value={character.innate.stats.con} />
+            <CardRow label="WIS" value={character.innate.stats.wis} />
+            <CardRow label="INT" value={character.innate.stats.int} />
+            <CardRow label="CHA" value={character.innate.stats.cha} />
+          </CardCol>
+          <CardCol>
+            <CardSpacer title="EFFORT" />
+            <CardRow label="BASIC" value={character.innate.effort.basic} />
+            <CardRow
+              label="WEAPON"
+              value={character.innate.effort.weapon_tools}
+            />
+            <CardRow label="SPECIAL" value={character.innate.effort.guns} />
+            <CardRow
+              label="MAGIC"
+              value={character.innate.effort.energy_magic}
+            />
+            <CardRow
+              label="ULTIMATE"
+              value={character.innate.effort.ultimate}
+            />
+          </CardCol>
+        </CardBlock>
       </CardBody>
     </CharacterCard>
   );
