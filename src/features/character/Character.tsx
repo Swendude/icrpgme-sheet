@@ -22,7 +22,6 @@ import CardSpacer from "./CardSpacer";
 import CardRow from "./CardRow";
 
 const CharacterCard = styled.div`
-  margin: 4% 20%;
   display: flex;
   flex-direction: column;
   padding: 0px;
@@ -60,7 +59,7 @@ export const Character = (props: { ix: number }) => {
   const character = useAppSelector(selectCharacter(props.ix));
 
   return (
-    <CharacterCard>
+    <CharacterCard className={`main-container`}>
       <TopBar
         name={character.name}
         lifeform={character.lifeform}
@@ -70,27 +69,62 @@ export const Character = (props: { ix: number }) => {
         <CardBlock>
           <CardCol>
             <CardSpacer title="STATS" />
-            <CardRow label="STR" value={character.innate.stats.str} />
-            <CardRow label="DEX" value={character.innate.stats.dex} />
-            <CardRow label="CON" value={character.innate.stats.con} />
-            <CardRow label="WIS" value={character.innate.stats.wis} />
-            <CardRow label="INT" value={character.innate.stats.int} />
-            <CardRow label="CHA" value={character.innate.stats.cha} />
+            <CardRow
+              label="STR"
+              extra="D20"
+              value={character.innate.stats.str}
+            />
+            <CardRow
+              label="DEX"
+              extra="D20"
+              value={character.innate.stats.dex}
+            />
+            <CardRow
+              label="CON"
+              extra="D20"
+              value={character.innate.stats.con}
+            />
+            <CardRow
+              label="WIS"
+              extra="D20"
+              value={character.innate.stats.wis}
+            />
+            <CardRow
+              label="INT"
+              extra="D20"
+              value={character.innate.stats.int}
+            />
+            <CardRow
+              label="CHA"
+              extra="D20"
+              value={character.innate.stats.cha}
+            />
           </CardCol>
           <CardCol>
             <CardSpacer title="EFFORT" />
-            <CardRow label="BASIC" value={character.innate.effort.basic} />
+            <CardRow
+              label="BASIC"
+              extra="D4"
+              value={character.innate.effort.basic}
+            />
             <CardRow
               label="WEAPON"
+              extra="D6"
               value={character.innate.effort.weapon_tools}
             />
-            <CardRow label="SPECIAL" value={character.innate.effort.guns} />
+            <CardRow
+              label="SPECIAL"
+              extra="D8"
+              value={character.innate.effort.guns}
+            />
             <CardRow
               label="MAGIC"
+              extra="D10"
               value={character.innate.effort.energy_magic}
             />
             <CardRow
               label="ULTIMATE"
+              extra="D12"
               value={character.innate.effort.ultimate}
             />
           </CardCol>

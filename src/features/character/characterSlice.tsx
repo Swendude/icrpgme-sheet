@@ -163,7 +163,7 @@ export function createAttrs(
 
 const initialState: Character[] = [
   {
-    name: "Thorin Oakenshield the Third of his name, king of the Iron Mountains",
+    name: "Thorin Oakenshield",
     lifeform: "Dwarf",
     type: "Warrior",
     story:
