@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-
 interface CardSpacerProps {
   title: string;
 }
@@ -10,18 +9,21 @@ const SpacerRow = styled.div`
   opacity: 0.4;
   text-transform: uppercase;
   display: flex;
+  justify-content: stretch;
   align-items: center;
+  padding: 0rem 1.2rem;
 `;
 
 const SpacerLine = styled.hr`
-  flex-grow: 1;
   border: solid black;
+  flex-grow: 1;
+  margin: 0rem;
   border-width: ${(props) => props.theme.borderWidth} 0 0 0;
 `;
 
 const SpacerTitle = styled.h3`
-  font-size: 0.6rem;
-  margin: 0.4rem 0;
+  font-size: 1rem;
+  margin: 0rem 0.6rem;
 `;
 
 const CardSpacer: FunctionComponent<CardSpacerProps> = (props) => {

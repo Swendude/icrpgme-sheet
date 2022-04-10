@@ -294,6 +294,9 @@ export const selectCharacter = (ix: number) => (state: RootState) => ({
   calculatedAttrs: {
     defense:
       state.characters[ix].innate.stats.con +
+      finalAttrs(state.characters[ix]).stats.def,
+    armor:
+      state.characters[ix].innate.stats.con +
       finalAttrs(state.characters[ix]).stats.def +
       10,
     final: finalAttrs(state.characters[ix]),
