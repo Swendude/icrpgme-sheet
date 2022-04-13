@@ -6,13 +6,15 @@ import CardSpacer from "./CardSpacer";
 import StatRow from "./StatRow";
 import InfoRow from "./InfoRow";
 import DefenseRow from "./DefenseRow";
+import ItemRow from "./ItemRow";
 const CharacterCard = styled.div`
   display: grid;
   grid-auto-columns: 1fr;
   grid-template-areas:
     "topbar topbar"
     "defense info"
-    "stats effort";
+    "stats effort"
+    "equipment equipment";
   gap: 0.5rem 1.5rem;
   color: white;
   background-color: ${(props) => `${props.theme.colors.background}`};
@@ -92,6 +94,12 @@ export const Character = (props: { ix: number }) => {
           extra="D12"
           value={character.innate.effort.ultimate}
         />
+      </CardBlock>
+      <CardBlock area="equipment">
+        <CardSpacer title="EQUIPMENT" />
+        {character.items.map((item) => (
+          <ItemRow item={item} />
+        ))}
       </CardBlock>
     </CharacterCard>
   );

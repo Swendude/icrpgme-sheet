@@ -182,7 +182,7 @@ const initialState: Character[] = [
       {
         name: "Orcrist",
         description: "ELVEN, SLICING, MASTERCRAFT",
-        equipped: true,
+        equipped: false,
         ...createAttrs({ stats: { str: 2 }, effort: { weapon_tools: 3 } }),
       },
       {
