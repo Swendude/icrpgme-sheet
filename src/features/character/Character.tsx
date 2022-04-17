@@ -60,39 +60,63 @@ export const Character = (props: { ix: number }) => {
 
       <CardBlock area="stats">
         <CardSpacer title="STATS" />
-        <StatRow label="STR" extra="D20" value={character.innate.stats.str} />
-        <StatRow label="DEX" extra="D20" value={character.innate.stats.dex} />
-        <StatRow label="CON" extra="D20" value={character.innate.stats.con} />
-        <StatRow label="WIS" extra="D20" value={character.innate.stats.wis} />
-        <StatRow label="INT" extra="D20" value={character.innate.stats.int} />
-        <StatRow label="CHA" extra="D20" value={character.innate.stats.cha} />
+        <StatRow
+          label="STR"
+          extra="D20"
+          value={character.calculatedAttrs.final.stats.str}
+        />
+        <StatRow
+          label="DEX"
+          extra="D20"
+          value={character.calculatedAttrs.final.stats.dex}
+        />
+        <StatRow
+          label="CON"
+          extra="D20"
+          value={character.calculatedAttrs.final.stats.con}
+        />
+        <StatRow
+          label="WIS"
+          extra="D20"
+          value={character.calculatedAttrs.final.stats.wis}
+        />
+        <StatRow
+          label="INT"
+          extra="D20"
+          value={character.calculatedAttrs.final.stats.int}
+        />
+        <StatRow
+          label="CHA"
+          extra="D20"
+          value={character.calculatedAttrs.final.stats.cha}
+        />
       </CardBlock>
       <CardBlock area="effort">
         <CardSpacer title="EFFORT" />
         <StatRow
           label="BASIC"
           extra="D4"
-          value={character.innate.effort.basic}
+          value={character.calculatedAttrs.final.effort.basic}
         />
         <StatRow
           label="WEAPON"
           extra="D6"
-          value={character.innate.effort.weapon_tools}
+          value={character.calculatedAttrs.final.effort.weapon_tools}
         />
         <StatRow
           label="SPECIAL"
           extra="D8"
-          value={character.innate.effort.guns}
+          value={character.calculatedAttrs.final.effort.guns}
         />
         <StatRow
           label="MAGIC"
           extra="D10"
-          value={character.innate.effort.energy_magic}
+          value={character.calculatedAttrs.final.effort.energy_magic}
         />
         <StatRow
           label="ULTIMATE"
           extra="D12"
-          value={character.innate.effort.ultimate}
+          value={character.calculatedAttrs.final.effort.ultimate}
         />
       </CardBlock>
       <CardBlock area="equipment">

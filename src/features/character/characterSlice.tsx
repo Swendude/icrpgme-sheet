@@ -10,7 +10,7 @@ export type CharacterHealth =
   | { state: "Dying"; counter: toRoll }
   | { state: "Dead" };
 
-interface Stats {
+export interface Stats {
   str: number;
   dex: number;
   con: number;
@@ -20,7 +20,7 @@ interface Stats {
   def: number;
 }
 
-interface Effort {
+export interface Effort {
   basic: number;
   weapon_tools: number;
   guns: number;
@@ -80,7 +80,7 @@ const finalAttrs = (char: Character): Attributes =>
   [
     char.innate,
     ...char.abilities,
-    ...char.items,
+    ...char.items.filter((item) => item.equipped),
     ...char.augments,
     ...char.powers,
   ].reduce(addAttributes);

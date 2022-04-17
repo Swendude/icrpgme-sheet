@@ -1,16 +1,25 @@
 import styled from "styled-components";
 
-export const ClickableBox = styled.div`
+interface ClickableBoxProps {
+  inverse?: boolean;
+}
+
+export const ClickableBox = styled.div<ClickableBoxProps>`
   border: 1px solid;
-  border-color: white;
-  padding: 0.2rem;
-  margin: 0.2rem;
+  border-color: ${(props) => (props.inverse ? "black" : "white")};
+  background-color: ${(props) => (props.inverse ? "white" : "black")};
+  color: ${(props) => (props.inverse ? "black" : "white")};
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin-right: 0.4rem;
+  margin-bottom: 0.4rem;
   font-size: ${(props) => props.theme.fontMd};
+  min-width: 1rem;
+  text-align: center;
 
   &&:hover {
-    border-color: black;
-    color: black;
-    background-color: white;
+    border-color: ${(props) => (props.inverse ? "white" : "black")};
+    color: ${(props) => (props.inverse ? "white" : "black")};
+    background-color: ${(props) => (props.inverse ? "black" : "white")};
     cursor: pointer;
   }
 `;
