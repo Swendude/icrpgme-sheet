@@ -21,26 +21,16 @@ body {
   background-color: rgba(55, 65, 81);
 }
 
-@media (max-width: 320px) {
-  html {
-    font-size: 12px;
-  }
-}
 
-@media (min-width: 321px) and (max-width: 576px) {
+@media (max-width: 576px) {
   html {
     font-size: 14px;
   }
 }
-@media (min-width: 577px) and (max-width: 768px) {
+@media (min-width: 577px){
   html {
     font-size: 16px;
   }
-  .main-container {margin: 4% 10%;}
+  .main-container {margin: 4% 2vw;}
 }
-@media (min-width: 769px) {
-  html {
-    font-size: 18px;
-  }
-  .main-container {margin: 4% 12%;}
-}
+
