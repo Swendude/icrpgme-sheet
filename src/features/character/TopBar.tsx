@@ -20,6 +20,7 @@ const TopBox = styled.div`
 const TopCol = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 0.5rem;
 `;
 
 const CountBox = styled.div`
@@ -27,7 +28,7 @@ const CountBox = styled.div`
   border-color: white;
   padding: 0.2rem;
   margin: 0.2rem;
-  font-size: 0.8rem;
+  font-size: ${(props) => props.theme.fontMd};
 
   &&:hover {
     border-color: black;
@@ -38,13 +39,13 @@ const CountBox = styled.div`
 `;
 
 const Name = styled.h1`
-  font-size: 2rem;
+  font-size: ${(props) => props.theme.fontXl};
   margin: 0px;
   max-width: 35rem;
 `;
 
 const Description = styled.span`
-  font-size: 1rem;
+  font-size: ${(props) => props.theme.fontLg};
   opacity: 0.6;
   text-transform: uppercase;
 `;

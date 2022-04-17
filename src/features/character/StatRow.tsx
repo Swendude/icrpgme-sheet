@@ -18,18 +18,18 @@ const Container = styled.div`
 
 const LabelText = styled.h3`
   margin: 0;
-  font-size: 1.2rem;
+  font-size: ${(props) => props.theme.fontLg}; ;
 `;
 
 const ExtraText = styled.span`
-  font-size: 0.7rem;
+  font-size: ${(props) => props.theme.fontMd};
   opacity: 0.4;
   padding-left: 0.2rem;
 `;
 
 const ValueText = styled.h3`
   margin: 0;
-  font-size: 1.6rem;
+  font-size: ${(props) => props.theme.fontXl};
   text-align: center;
 `;
 

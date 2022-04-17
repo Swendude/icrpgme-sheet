@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
+
 interface CardSpacerProps {
   title: string;
 }
@@ -22,7 +23,7 @@ const SpacerLine = styled.hr`
 `;
 
 const SpacerTitle = styled.h3`
-  font-size: 1rem;
+  font-size: ${(props) => props.theme.fontMd};
   margin: 0rem 0.6rem;
 `;
 

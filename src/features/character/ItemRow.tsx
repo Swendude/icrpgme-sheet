@@ -9,7 +9,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: black;
-  margin: 1rem 1.2rem;
+  margin: 0rem 1.2rem;
   border: 2px solid #000000;
   border-radius: ${({ theme }) =>
     `${theme.borderRadius} 0 0 ${theme.borderRadius}`};
@@ -20,13 +20,13 @@ const Header = styled.div`
   background-color: black;
   color: white;
   align-items: center;
-  padding: 0.4rem 0.4rem 0.8rem 0.4rem;
+  padding: 0.1rem 0.4rem 0.1rem 0.4rem;
   justify-content: space-between;
 `;
 
 const Title = styled.h3`
   margin: 0;
-  font-size: 2rem;
+  font-size: ${(props) => props.theme.fontLg};
 `;
 const EquipOuter = styled.div`
   border-radius: 50%;

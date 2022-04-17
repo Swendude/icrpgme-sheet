@@ -6,7 +6,7 @@ interface DefenseRowProps {
 
 const DefenseLabel = styled.h3`
   margin: 0.4rem 0rem;
-  font-size: 1rem;
+  font-size: ${(props) => props.theme.fontMd};
 `;
 
 const DefenseBlock = styled.div`
