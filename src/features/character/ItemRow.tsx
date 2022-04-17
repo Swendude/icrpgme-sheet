@@ -1,15 +1,20 @@
 import { Item } from "./characterSlice";
 import styled from "styled-components";
-
+import ClickableBox from "./ClickableBox";
+import { switchItem } from "./characterSlice";
+import { AppDispatch } from "../../app/store";
+import { useDispatch } from "react-redux";
 interface ItemRowProps {
   item: Item;
+  ix: number;
+  char_ix: number;
 }
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: black;
-  margin: 0rem 1.2rem;
+  margin: 0rem 1.2rem 1.2rem 1.2rem;
   border: 2px solid #000000;
   border-radius: ${({ theme }) =>
     `${theme.borderRadius} 0 0 ${theme.borderRadius}`};
@@ -20,7 +25,7 @@ const Header = styled.div`
   background-color: black;
   color: white;
   align-items: center;
-  padding: 0.1rem 0.4rem 0.1rem 0.4rem;
+  padding: 0.4rem 0.4rem 0.2rem 0.4rem;
   justify-content: space-between;
 `;
 
@@ -28,34 +33,26 @@ const Title = styled.h3`
   margin: 0;
   font-size: ${(props) => props.theme.fontLg};
 `;
-const EquipOuter = styled.div`
-  border-radius: 50%;
-  border: 2px white solid;
-  height: 2rem;
-  width: 2rem;
-  display: flex;
+
+const Description = styled.p`
+  margin: 1rem 0rem 0.5rem 0.4rem;
 `;
 
-const EquipState = styled.div<{ state: boolean }>`
-  border-radius: 50%;
-  background-color: ${({ state }) => `${state ? "white" : `black`}`};
-  border: ${({ state }) => `${state ? "2px white solid" : `2px white dotted`}`};
-  height: 1.5rem;
-  width: 1.5rem;
-  margin: auto auto;
-`;
-
-const ItemRow = ({ item }: ItemRowProps) => {
+const ItemRow = ({ item, ix, char_ix }: ItemRowProps) => {
+  const dispatch = useDispatch();
   return (
     <Container>
       <Header>
         <Title>{item.name}</Title>
-        <EquipOuter>
-          <EquipState state={item.equipped} />
-        </EquipOuter>
+        <ClickableBox
+          onClick={() => {
+            dispatch(switchItem({ item_ix: ix, char_ix }));
+          }}
+        >
+          {item.equipped ? "EQUIPPED" : "CARRYING"}
+        </ClickableBox>
       </Header>
-      <p>{item.description}</p>
-      {item.hearts ? <p>ADDS 1 HEART</p> : <></>}
+      <Description>{item.description}</Description>
     </Container>
   );
 };

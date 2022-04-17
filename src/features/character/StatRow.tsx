@@ -10,7 +10,8 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   color: black;
-  margin: 1rem 1.2rem;
+  margin: 1.2rem;
+  margin-top: 0rem;
   border: 2px solid #000000;
   border-radius: ${({ theme }) =>
     `${theme.borderRadius} 0 0 ${theme.borderRadius}`};

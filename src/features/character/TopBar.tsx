@@ -1,6 +1,7 @@
 import { Character } from "./characterSlice";
 
 import styled, { css } from "styled-components";
+import { ClickableBox } from "./ClickableBox";
 
 const TopBox = styled.div`
   display: flex;
@@ -21,21 +22,6 @@ const TopCol = styled.div`
   display: flex;
   flex-direction: column;
   padding-bottom: 0.5rem;
-`;
-
-const CountBox = styled.div`
-  border: 1px solid;
-  border-color: white;
-  padding: 0.2rem;
-  margin: 0.2rem;
-  font-size: ${(props) => props.theme.fontMd};
-
-  &&:hover {
-    border-color: black;
-    color: black;
-    background-color: white;
-    cursor: pointer;
-  }
 `;
 
 const Name = styled.h1`
@@ -60,8 +46,8 @@ const TopBar = (props: Partial<Character>) => {
         </Description>
       </TopCol>
       <TopCol>
-        <CountBox>10/10 HP</CountBox>
-        <CountBox>10/10 SP</CountBox>
+        <ClickableBox>10/10 HP</ClickableBox>
+        <ClickableBox>10/10 SP</ClickableBox>
       </TopCol>
     </TopBox>
   );

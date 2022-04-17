@@ -97,8 +97,8 @@ export const Character = (props: { ix: number }) => {
       </CardBlock>
       <CardBlock area="equipment">
         <CardSpacer title="EQUIPMENT" />
-        {character.items.map((item) => (
-          <ItemRow item={item} />
+        {character.items.map((item, ix) => (
+          <ItemRow item={item} ix={ix} char_ix={props.ix} />
         ))}
       </CardBlock>
     </CharacterCard>

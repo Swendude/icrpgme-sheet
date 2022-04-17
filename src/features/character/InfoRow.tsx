@@ -29,7 +29,8 @@ const HeroCoinInnerCircle = styled.div<HeroCoinCircleProps>`
 `;
 
 const InfoLabel = styled.h3`
-  margin: 0.4rem 0rem;
+  margin: 0rem;
+  margin-bottom: 0.4rem;
   font-size: ${(props) => props.theme.fontMd};
 `;
 
@@ -37,13 +38,11 @@ const InfoBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0.5rem 0rem;
 `;
 
 const Row = styled.div`
   color: black;
   display: flex;
-  padding: 0rem 1.2rem;
   justify-content: space-around;
 `;
 interface CoinTextProps {

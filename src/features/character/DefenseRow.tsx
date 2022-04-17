@@ -13,7 +13,8 @@ const DefenseBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem 0rem;
+  padding: 1.2rem;
+  padding-top: 0rem;
 `;
 
 const Row = styled.div`

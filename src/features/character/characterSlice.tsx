@@ -199,7 +199,8 @@ const initialState: Character[] = [
       },
       {
         name: "Mana Stone",
-        description: "EXTRA POWER",
+        description:
+          "EXTRA POWER WITH A REALLY LONG NONSENSICAL DESCRIPTION THAT DOESN'T END",
         equipped: true,
         ...createAttrs({ stun: 1 }),
       },
@@ -219,6 +220,18 @@ export const characterSlice = createSlice({
   name: "characters",
   initialState,
   reducers: {
+    switchItem(
+      state,
+      action: PayloadAction<{ char_ix: number; item_ix: number }>
+    ) {
+      const cur_items = state[action.payload.char_ix].items;
+      state[action.payload.char_ix].items = cur_items.map((item, ix) =>
+        ix === action.payload.item_ix
+          ? { ...item, equipped: !item.equipped }
+          : item
+      );
+      return state;
+    },
     changeHitpoints(
       state,
       action: PayloadAction<{ char_ix: number; change: number }>
@@ -285,6 +298,7 @@ export const {
   switchHeroCoin,
   changeCoin,
   changeStunpoints,
+  switchItem,
 } = characterSlice.actions;
 
 export const selectCoin = (ix: number) => (state: RootState) =>

@@ -12,7 +12,9 @@ const SpacerRow = styled.div`
   display: flex;
   justify-content: stretch;
   align-items: center;
-  padding: 0rem 1.2rem;
+  padding: 1.2rem;
+  padding-top: 0rem;
+  padding-bottom: 1rem;
 `;
 
 const SpacerLine = styled.hr`
