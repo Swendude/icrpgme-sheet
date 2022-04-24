@@ -9,10 +9,10 @@ export const ClickableBox = styled.div<ClickableBoxProps>`
   border-color: ${(props) => (props.inverse ? "black" : "white")};
   background-color: ${(props) => (props.inverse ? "white" : "black")};
   color: ${(props) => (props.inverse ? "black" : "white")};
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 0.5rem;
   margin-right: 0.4rem;
   margin-bottom: 0.4rem;
-  font-size: ${(props) => props.theme.fontMd};
+  font-size: ${(props) => props.theme.fontSm};
   min-width: 1rem;
   text-align: center;
 

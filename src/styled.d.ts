@@ -6,6 +6,7 @@ declare module "styled-components" {
   export interface DefaultTheme {
     borderRadius: string;
     borderWidth: string;
+    fontSm: string;
     fontMd: string;
     fontLg: string;
     fontXl: string;

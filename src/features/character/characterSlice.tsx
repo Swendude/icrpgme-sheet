@@ -183,13 +183,24 @@ const initialState: Character[] = [
         name: "Orcrist",
         description: "ELVEN, SLICING, MASTERCRAFT",
         equipped: false,
-        ...createAttrs({ stats: { str: 2 }, effort: { weapon_tools: 3 } }),
+        ...createAttrs({
+          stats: {
+            str: 2,
+            cha: 4,
+            dex: 1,
+            con: 4,
+            def: 4,
+            wis: 8,
+            int: 1,
+          },
+          effort: { weapon_tools: 3 },
+        }),
       },
       {
-        name: "Oak shield",
+        name: "Oak shield with an extremely long title, shees this guy has a lot to say",
         description: "IMPROVISED, MASSIVE, TOUGH",
-        equipped: true,
-        ...createAttrs({ stats: { def: 4 } }),
+        equipped: false,
+        ...createAttrs({ stats: { def: 4 }, effort: { basic: 6 } }),
       },
       {
         name: "Heart Stone",
@@ -289,8 +300,34 @@ export const characterSlice = createSlice({
     ) {
       state[action.payload.char_ix].innate = action.payload.new_innate;
     },
+    moveItem(
+      state,
+      action: PayloadAction<{ char_ix: number; item_ix: number; up: boolean }>
+    ) {
+      console.log(action.payload.item_ix);
+      console.log(action.payload.item_ix + (action.payload.up ? -1 : 1));
+      state[action.payload.char_ix].items = moveItemTo(
+        state[action.payload.char_ix].items,
+        action.payload.item_ix,
+        action.payload.item_ix + (action.payload.up ? -1 : 1)
+      );
+      return state;
+    },
   },
 });
+
+function moveItemTo(
+  arr: Array<Item>,
+  itemIndex: number,
+  targetIndex: number
+): Array<Item> {
+  if (targetIndex < 0 || targetIndex > arr.length - 1) {
+    return arr;
+  }
+  let itemRemoved = arr.splice(itemIndex, 1); // splice() returns the remove element as an array
+  arr.splice(targetIndex, 0, itemRemoved[0]); // Insert itemRemoved into the target index
+  return arr;
+}
 
 export const {
   updateInnate,
@@ -299,6 +336,7 @@ export const {
   changeCoin,
   changeStunpoints,
   switchItem,
+  moveItem,
 } = characterSlice.actions;
 
 export const selectCoin = (ix: number) => (state: RootState) =>

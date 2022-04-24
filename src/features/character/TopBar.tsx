@@ -1,6 +1,6 @@
 import { Character } from "./characterSlice";
 
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { ClickableBox } from "./ClickableBox";
 
 const TopBox = styled.div`

@@ -3,6 +3,7 @@ import { DefaultTheme } from "styled-components";
 const icrpgTheme: DefaultTheme = {
   borderRadius: "3px",
   borderWidth: "2px",
+  fontSm: "0.7rem",
   fontMd: "1rem",
   fontLg: "1.4rem",
   fontXl: "2rem",
