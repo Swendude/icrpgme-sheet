@@ -15,12 +15,19 @@ export const ClickableBox = styled.div<ClickableBoxProps>`
   font-size: ${(props) => props.theme.fontSm};
   min-width: 1rem;
   text-align: center;
-
-  &&:hover {
+  &&:active {
     border-color: ${(props) => (props.inverse ? "white" : "black")};
     color: ${(props) => (props.inverse ? "white" : "black")};
     background-color: ${(props) => (props.inverse ? "black" : "white")};
     cursor: pointer;
+  }
+  @media (hover: hover) {
+    &&:hover {
+      border-color: ${(props) => (props.inverse ? "white" : "black")};
+      color: ${(props) => (props.inverse ? "white" : "black")};
+      background-color: ${(props) => (props.inverse ? "black" : "white")};
+      cursor: pointer;
+    }
   }
 `;
 
